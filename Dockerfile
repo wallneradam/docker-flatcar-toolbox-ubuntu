@@ -16,7 +16,7 @@ RUN apt-get update && apt-get upgrade -y && \
     sed -i "s/%sudo\s*ALL=(ALL:ALL)\s*ALL/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/" /etc/sudoers && \
     # Bypass original bashrc
     mv /etc/bash.bashrc /etc/bash.basrc.coreos && \
-    echo -e ". /etc/bash.bashrc.coreos\nPS1=\"\\[\\033[01;35m\\]toolbox\\[\\033[01;34m\\] $PS1\"" >/etc/bash.bashrc
+    echo ". /etc/bash.bashrc.coreos\nPS1=\"\\[\\033[01;35m\\]toolbox\\[\\033[01;34m\\] \$PS1\"" >/etc/bash.bashrc
 
 WORKDIR /home/core
 
