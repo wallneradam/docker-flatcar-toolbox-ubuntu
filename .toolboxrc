@@ -3,7 +3,6 @@ if [ "$1" != '' ]; then PARAMS="$@"; else PARAMS="exec /bin/bash"; fi
 # This way we can pass SSH_AUTH_SOCK to fleetctl
 set -- /bin/bash -c "export SSH_AUTH_SOCK=${SSH_AUTH_SOCK} && $PARAMS"
 TOOLBOX_DOCKER_IMAGE=pickapp/docker-coreos-toolbox-ubuntu
-TOOLBOX_DOCKER_TAG=0.1.1
 TOOLBOX_USER=core
 # BIND needed host directories
 TOOLBOX_BIND="\
