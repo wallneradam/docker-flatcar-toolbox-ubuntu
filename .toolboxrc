@@ -1,15 +1,15 @@
-# If we specify command after toolbox command, we should start that, otherwise we start bash
-if [ "$1" != '' ]; then PARAMS="$@"; else PARAMS="exec /bin/bash"; fi
-# This way we can pass SSH_AUTH_SOCK to fleetctl
-set -- /bin/bash -c "export SSH_AUTH_SOCK=${SSH_AUTH_SOCK} && $PARAMS"
 TOOLBOX_DOCKER_IMAGE=pickapp/docker-coreos-toolbox-ubuntu
 TOOLBOX_USER=core
+
 # BIND needed host directories
 TOOLBOX_BIND="\
     --bind=/:/media/root \
     --bind=/home/core --bind-ro=/usr/share/skel/.bash_profile --bind=/etc/bash/bashrc:/etc/bash.bashrc.coreos \
-    --bind=/root \
+    --bind=/root --bind=/tmp \
     --bind=/etc/hosts --bind=/etc/hostname \
     --bind-ro=/usr/bin/docker \
     --bind-ro=/var/log/journal --bind-ro=/etc/machine-id \
-    --bind=/run/docker.sock --bind=/run/fleet.sock --bind=${SSH_AUTH_SOCK}"
+    --bind=/run/docker.sock --bind=/run/fleet.sock --bind=${SSH_AUTH_SOCK} \
+    --bind=/usr/bin/docker --bind=/usr/bin/fleetctl --bind=/usr/bin/etcdctl \
+    --setenv=SSH_AUTH_SOCK=${SSH_AUTH_SOCK} \
+    --machine=toolbox-ubuntu"
