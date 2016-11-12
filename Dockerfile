@@ -11,6 +11,8 @@ RUN \
     adduser core fleet && \
     addgroup --gid 233 coredocker && \
     adduser core coredocker && \
+    addgroup --gid 248 core-systemd-journal \
+    adduser core core-systemd-journal && \
     # Install needed packages
     apt-get install -y sudo net-tools inetutils-ping bash-completion mc tmux && \
     apt-get clean && \
