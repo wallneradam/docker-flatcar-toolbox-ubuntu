@@ -11,6 +11,11 @@ We use this solution in production on our classified-ad site: [apro.hu](http://a
 - Copy the .toolboxrc file into /home/core/.toolboxrc
 - Start "toolbox" command
 
+After install you can remove the docker image, no longer needed (it is extracted to /var/lib/toolbox):
+```
+docker rmi pickapp/docker-coreos-toolbox-ubuntu
+```
+
 ## Features
 
 - Full Ubuntu server, with all of its tools
