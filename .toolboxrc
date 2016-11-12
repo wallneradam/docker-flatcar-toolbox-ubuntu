@@ -1,6 +1,15 @@
 TOOLBOX_DOCKER_IMAGE=pickapp/docker-coreos-toolbox-ubuntu
 TOOLBOX_USER=core
 
+# Make SSH agent working even with tmux
+LATEST_SSH_AUTH_SOCK=/tmp/latest_ssh_auth_sock
+if test "$SSH_AUTH_SOCK"; then
+    if [ ! -e "$LATEST_SSH_AUTH_SOCK" ]; then
+        rm "$LATEST_SSH_AUTH_SOCK" 2>/dev/null
+        ln -sf "$SSH_AUTH_SOCK" "$LATEST_SSH_AUTH_SOCK"
+    fi
+fi
+
 # BIND needed host directories
 TOOLBOX_BIND="\
     --bind=/:/media/root \
@@ -12,5 +21,6 @@ TOOLBOX_BIND="\
     --bind=/run/docker.sock --bind=/run/fleet.sock --bind=${SSH_AUTH_SOCK} \
     --bind=/usr/bin/docker --bind=/usr/bin/fleetctl --bind=/usr/bin/etcdctl \
     --quiet \
-    --setenv=SSH_AUTH_SOCK=${SSH_AUTH_SOCK} \
+    --setenv=SSH_AUTH_SOCK=${LATEST_SSH_AUTH_SOCK} \
+    --setenv=IGNOREEOF=4 \
     --machine=toolbox-ubuntu"
