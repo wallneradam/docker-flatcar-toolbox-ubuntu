@@ -11,5 +11,6 @@ TOOLBOX_BIND="\
     --bind-ro=/var/log/journal --bind-ro=/etc/machine-id \
     --bind=/run/docker.sock --bind=/run/fleet.sock --bind=${SSH_AUTH_SOCK} \
     --bind=/usr/bin/docker --bind=/usr/bin/fleetctl --bind=/usr/bin/etcdctl \
+    --quiet \
     --setenv=SSH_AUTH_SOCK=${SSH_AUTH_SOCK} \
     --machine=toolbox-ubuntu"
