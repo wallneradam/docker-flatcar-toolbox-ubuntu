@@ -18,6 +18,10 @@ RUN \
     apt-get clean && \
     # This is needed by host docker
     ln -s /lib/x86_64-linux-gnu/libdevmapper.so.1.02.1 /lib/x86_64-linux-gnu/libdevmapper.so.1.02 && \
+    # Hosts and hostname
+    rm /etc/hosts && rm /etc/hostname && \
+    ln -s /media/root/etc/hosts /etc/hosts && \
+    ln -s /media/root/etc/hostname /etc/hostname && \    
     # Sudo without password
     sed -i "s/%sudo\s*ALL=(ALL:ALL)\s*ALL/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/" /etc/sudoers && \
     # Add core user to sudoers
