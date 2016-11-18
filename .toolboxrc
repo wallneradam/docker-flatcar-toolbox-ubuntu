@@ -15,6 +15,7 @@ TOOLBOX_BIND="\
     --bind=/:/media/root \
     --bind=/home/core --bind-ro=/usr/share/skel/.bash_profile --bind=/etc/bash/bashrc:/etc/bash.bashrc.coreos \
     --bind=/root --bind=/tmp --bind=/srv \
+    --bind=/etc/hosts --bind=/etc/hostname \
     --bind-ro=/usr/bin/docker \
     --bind-ro=/var/log/journal --bind-ro=/etc/machine-id \
     --bind=/run/docker.sock --bind=/run/fleet.sock --bind=${SSH_AUTH_SOCK} \
