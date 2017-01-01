@@ -4,6 +4,7 @@ TOOLBOX_USER=core
 # Make SSH agent working even with tmux
 LATEST_SSH_AUTH_SOCK=/tmp/latest_ssh_auth_sock
 if test "$SSH_AUTH_SOCK"; then
+    SSH_AUTH_BIND="--bind=${SSH_AUTH_SOCK}"
     if [ ! -e "$LATEST_SSH_AUTH_SOCK" ]; then
         rm "$LATEST_SSH_AUTH_SOCK" 2>/dev/null
         ln -sf "$SSH_AUTH_SOCK" "$LATEST_SSH_AUTH_SOCK"
@@ -18,7 +19,7 @@ TOOLBOX_BIND="\
     --bind=/etc/hosts --bind=/etc/hostname \
     --bind-ro=/usr/bin/docker \
     --bind-ro=/var/log/journal --bind-ro=/etc/machine-id \
-    --bind=/run/docker.sock --bind=/run/fleet.sock --bind=${SSH_AUTH_SOCK} \
+    --bind=/run/docker.sock --bind=/run/fleet.sock ${SSH_AUTH_BIND} \
     --bind=/usr/bin/docker --bind=/usr/bin/fleetctl --bind=/usr/bin/etcdctl \
     --quiet \
     --setenv=SSH_AUTH_SOCK=${LATEST_SSH_AUTH_SOCK} \
