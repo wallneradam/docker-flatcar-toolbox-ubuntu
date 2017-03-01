@@ -1,5 +1,6 @@
 TOOLBOX_DOCKER_IMAGE=pickapp/docker-coreos-toolbox-ubuntu
 TOOLBOX_USER=core
+TOOLBOX_DOCKER_TAG=latest
 
 # Make SSH agent working even with tmux
 LATEST_SSH_AUTH_SOCK=/tmp/latest_ssh_auth_sock
