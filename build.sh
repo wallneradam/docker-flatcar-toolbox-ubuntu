@@ -1,3 +1,8 @@
 #!/bin/bash
-docker build --rm --no-cache -t pickapp/docker-coreos-toolbox-alpine:0.1.3 .
-docker push pickapp/docker-coreos-toolbox-alpine:0.1.3
+NAME="wallneradam/docker-flatcar-toolbox-ubuntu"
+VERSION="0.1.0"
+
+docker build --rm --no-cache -t ${NAME}:${VERSION} -t ${NAME}:latest . \
+   && docker push ${NAME}:${VERSION} \
+   && docker push ${NAME}:latest
+

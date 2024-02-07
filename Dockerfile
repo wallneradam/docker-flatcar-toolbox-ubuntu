@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-MAINTAINER Adam Wallner <wallner@bitbaro.hu>
+LABEL maintainer="Adam Wallner <adam.wallner@gmail.com>"
 
 RUN \
     # Upgrade
@@ -15,17 +15,16 @@ RUN \
     adduser core core-systemd-journal && \
     # Install needed packages
     apt-get install -y sudo net-tools inetutils-ping bash-completion mc tmux openssh-client && \
-    apt-get clean && \
-    # This is needed by host docker
-    ln -s /lib/x86_64-linux-gnu/libdevmapper.so.1.02.1 /lib/x86_64-linux-gnu/libdevmapper.so.1.02 && \
     # Sudo without password
     sed -i "s/%sudo\s*ALL=(ALL:ALL)\s*ALL/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/" /etc/sudoers && \
     # Add core user to sudoers
     adduser core sudo && \
     # Bypass original bashrc
     mv /etc/bash.bashrc /etc/bash.basrc.coreos && \
-    echo ". /etc/bash.bashrc.coreos\nPS1=\"\\[\\033[01;35m\\]toolbox\\[\\033[01;34m\\] \$PS1\"" >/etc/bash.bashrc
-    
+    echo ". /etc/bash.bashrc.coreos\nPS1=\"\\[\\033[01;35m\\]toolbox\\[\\033[01;34m\\] \$PS1\"" >/etc/bash.bashrc && \
+    # Cleanup
+    apt-get clean
+
 WORKDIR /home/core
 
 ENTRYPOINT ["/bin/bash"]

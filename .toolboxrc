@@ -1,4 +1,4 @@
-TOOLBOX_DOCKER_IMAGE=pickapp/docker-coreos-toolbox-ubuntu
+TOOLBOX_DOCKER_IMAGE=docker.io/wallneradam/docker-flatcar-toolbox-ubuntu
 TOOLBOX_USER=core
 TOOLBOX_DOCKER_TAG=latest
 
@@ -12,12 +12,6 @@ if test "$SSH_AUTH_SOCK"; then
     fi
 fi
 
-# If torcx installed
-if [ -f /run/torcx/bin/docker ]; then
-    DP=/run/torcx
-else
-    DP=/usr
-fi
 
 # BIND needed host directories
 TOOLBOX_BIND="\
@@ -27,8 +21,8 @@ TOOLBOX_BIND="\
     --bind=/etc/hosts --bind=/etc/hostname \
     --bind-ro=/usr/bin/docker \
     --bind-ro=/var/log/journal --bind-ro=/etc/machine-id \
-    --bind=/run/docker.sock --bind=/run/fleet.sock ${SSH_AUTH_BIND} \
-    --bind=${DP}/bin/docker:/usr/bin/docker --bind=/usr/bin/fleetctl --bind=/usr/bin/etcdctl \
+    --bind=/run/docker.sock ${SSH_AUTH_BIND} \
+    --bind=/usr/bin/docker:/usr/bin/docker --bind=/usr/bin/etcdctl \
     --quiet \
     --setenv=SSH_AUTH_SOCK=${LATEST_SSH_AUTH_SOCK} \
     --setenv=IGNOREEOF=4 \
