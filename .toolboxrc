@@ -2,28 +2,42 @@ TOOLBOX_DOCKER_IMAGE=docker.io/wallneradam/docker-flatcar-toolbox-ubuntu
 TOOLBOX_USER=core
 TOOLBOX_DOCKER_TAG=latest
 
+CONTAINER_MACHINE_ID=d7f78490382fccf97ebea1b365c692f6
+HOST_MACHINE_ID=$(cat /etc/machine-id)
+
 # Make SSH agent working even with tmux
-LATEST_SSH_AUTH_SOCK=/tmp/latest_ssh_auth_sock
+latest_ssh_auth_sock=/tmp/latest_ssh_auth_sock
 if test "$SSH_AUTH_SOCK"; then
     SSH_AUTH_BIND="--bind=${SSH_AUTH_SOCK}"
-    if [ ! -e "$LATEST_SSH_AUTH_SOCK" ]; then
-        rm "$LATEST_SSH_AUTH_SOCK" 2>/dev/null
-        ln -sf "$SSH_AUTH_SOCK" "$LATEST_SSH_AUTH_SOCK"
+    if [ ! -e "$latest_ssh_auth_sock" ]; then
+        rm "$latest_ssh_auth_sock" 2>/dev/null
+        ln -sf "$SSH_AUTH_SOCK" "$latest_ssh_auth_sock"
     fi
 fi
 
+# If torcx installed
+if [ -f /run/torcx/bin/docker ]; then
+    DP=/run/torcx
+else
+    DP=/usr
+fi
+
+# /run is automatically binded
+mkdir -p /run/lock
 
 # BIND needed host directories
 TOOLBOX_BIND="\
     --bind=/:/media/root \
-    --bind=/home/core --bind-ro=/usr/share/skel/.bash_profile --bind=/etc/bash/bashrc:/etc/bash.bashrc.coreos \
-    --bind=/root --bind=/tmp --bind=/srv \
+    --bind=/home/core \
+    --bind-ro=/usr/share/skel/.bash_profile --bind-ro=/usr/share/skel/.bash_logout --bind-ro=/usr/share/skel/.bashrc \
+    --bind-ro=/home/core/.bash_profile --bind-ro=/home/core/.bash_logout --bind-ro=/home/core/.bashrc \
+    --bind=/etc/bash/bashrc:/etc/bash.bashrc.coreos \
+    --bind=/root --bind=/tmp --bind=/srv --bind=/opt \
     --bind=/etc/hosts --bind=/etc/hostname \
-    --bind-ro=/usr/bin/docker \
-    --bind-ro=/var/log/journal --bind-ro=/etc/machine-id \
-    --bind=/run/docker.sock ${SSH_AUTH_BIND} \
-    --bind=/usr/bin/docker:/usr/bin/docker --bind=/usr/bin/etcdctl \
+    ${SSH_AUTH_BIND} \
+    --bind=${DP}/bin/docker:/usr/bin/docker --bind=/usr/bin/etcdctl \
+    --bind=/etc/systemd --bind=/lib/systemd/system --bind-ro=/var/log/journal/${HOST_MACHINE_ID}:/var/log/journal/${CONTAINER_MACHINE_ID} --bind=/var/lib/systemd \
     --quiet \
-    --setenv=SSH_AUTH_SOCK=${LATEST_SSH_AUTH_SOCK} \
+    --setenv=SSH_AUTH_SOCK=${latest_ssh_auth_sock} \
     --setenv=IGNOREEOF=4 \
     --machine=toolbox-ubuntu"
